@@ -1,0 +1,17 @@
+# Node
+node_modules/
+
+# Vite
+.vite/
+node_modules/.vite/
+
+# Optional OS/editor specific
+.DS_Store
+.vscode/
+
+
+node_modules/.bin/
+
+#dist
+dist/
+OneGeniusSEO.UI/.env
