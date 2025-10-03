@@ -43,7 +43,7 @@ const GoogleConsoleCharts = ({
         </div>
         <Row>
           <Col md={6} className="mt-3">
-            <p>Number of people who clicked on your website</p>
+            {/* <p>Number of people who clicked on your website</p> */}
             <ClicksLineGraph
               id={SearchClicksGsc[0].id}
               SquareBox={SearchClicksGsc[0]}
@@ -93,7 +93,7 @@ const GoogleConsoleCharts = ({
         </Row>
       </div>
 
-      {/* <<<<<< CHANGE: REF KO COL PAR MOVE KIYA गया HAI TAAKI HEADING BHI CAPTURE HO >>>>>> */}
+  
       <Row>
         <Col className="mb-5 g-4 mt-3" md={12} ref={(el) => setChartRef('gsc_top50QueriesTable', el)}>
           <div className={`${style.organic_heading} `}>
