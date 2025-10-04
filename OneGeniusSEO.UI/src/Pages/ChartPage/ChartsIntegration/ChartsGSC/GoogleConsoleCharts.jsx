@@ -28,6 +28,7 @@ const GoogleConsoleCharts = ({
     <>
       {/* GSC Charts */}
       <div className={`text-center mt-5 mb-5`}>
+         {" "}
         <h4 className=" " style={{ fontSize: "25px" }}>
           Website Monitoring and Performance
         </h4>
@@ -35,14 +36,14 @@ const GoogleConsoleCharts = ({
           (Data Source - Google Search Console )
         </p>
       </div>
-
-      {/* <<<<<< CHANGE: REF KO POORE "TOP QUERIES" SECTION PAR LAGANE KE LIYE WRAPPER DIV ADD KIYE >>>>>> */}
+      
       <div ref={(el) => setChartRef('gsc_clicksLineGraph', el)}>
         <div className={`${style.organic_heading} `}>
-          <h4 className="mb-0">Top Queries</h4>
+           {" "}
+          <h4 className="mb-0">Top Queries</h4>{" "}
         </div>
         <Row>
-          <Col md={6} className="mt-3">
+         
             {/* <p>Number of people who clicked on your website</p> */}
             <ClicksLineGraph
               id={SearchClicksGsc[0].id}
@@ -52,7 +53,7 @@ const GoogleConsoleCharts = ({
               title={SearchClicksGsc[0].title}
               siteUrl={siteUrl}
             />
-          </Col>
+          
           <Col md={6} className="mt-3">
             <p>What people are searching for you - Top 5 Keywords</p>
             {/* Note: Ye chart 'gsc_clicksLineGraph' ke screenshot me aa jayega. Agar alag se chahiye toh naya ID/ref banayein. */}
@@ -70,13 +71,6 @@ const GoogleConsoleCharts = ({
         </Row>
       </div>
       
-      {/* Note: Top 5 Queries ka dusra chart, gsc_top5QueriesBar, upar wale screenshot me hi aa gaya hai. Agar aapko dono alag alag chahiye, to aapko dono ke liye alag alag wrapper div banana padega. Simplicity ke liye maine dono ko ek me daal diya hai. */}
-      {/* Agar gsc_top5QueriesBar ko alag se capture karna hai toh yeh structure use karein:
-        <div ref={(el) => setChartRef('gsc_top5QueriesBar', el)}>
-          <p>What people are searching for you - Top 5 Keywords</p>
-          <ProgressBar ... />
-        </div>
-      */}
 
       <div ref={(el) => setChartRef('gsc_performanceMetrices', el)}>
         <Row>

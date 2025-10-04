@@ -29,6 +29,8 @@ const ChartGAds = ({
   endDate,
   style,
   ClicksConversionCost,
+    setChartRef, // <-- Yahan naya prop receive karein for pdf 
+ 
 }) => {
   return (
     <>
@@ -46,7 +48,7 @@ const ChartGAds = ({
           <LineChartGAds title={"Clicks"} />
         </Col>
       </Row> */}
-      <Row>
+  <Row ref={(el) => setChartRef('gads_summary_cards', el)}> {/* <-- REF ADDED */}
         <Col md={12}>
           <GoogleAdsSummary
             customerID={googleAdsCustomerId}
@@ -58,7 +60,7 @@ const ChartGAds = ({
         </Col>{" "}
       </Row>
 
-      <Row>
+         <Row ref={(el) => setChartRef('gads_three_month_trend', el)}> {/* <-- REF ADDED */}
         <GoogleAdsThreeMonthCostConversionCost
           customerID={googleAdsCustomerId}
           startDate={startDate}
@@ -83,7 +85,7 @@ const ChartGAds = ({
           <DoughnutGoogleAds />
         </Col>
       </Row> */}
-      <Row>
+        <Row ref={(el) => setChartRef('gads_performance_by_device', el)}> {/* <-- REF ADDED */}
         <GoogleAdsDeviceTable
           customerID={googleAdsCustomerId}
           startDate={startDate}
@@ -92,7 +94,7 @@ const ChartGAds = ({
         />
       </Row>
 
-      <Row>
+      <Row ref={(el) => setChartRef('gads_keyword_performance', el)}> {/* <-- REF ADDED */}
         <GoogleAdsTable
           customerID={googleAdsCustomerId}
           startDate={startDate}
@@ -100,8 +102,7 @@ const ChartGAds = ({
           ApiData={ClicksConversionCost[2]}
         />
       </Row>
-
-      <Row>
+     <Row ref={(el) => setChartRef('gads_landing_page_performance', el)}> {/* <-- REF ADDED */}
         <GoogleAdsLandingPageTable
           customerID={googleAdsCustomerId}
           startDate={startDate}
@@ -110,7 +111,7 @@ const ChartGAds = ({
         />
       </Row>
 
-      <Row>
+        <Row ref={(el) => setChartRef('gads_campaign_type_performance', el)}> {/* <-- REF ADDED */}
         <GoogleAdsCampaignTable
           customerID={googleAdsCustomerId}
           startDate={startDate}
@@ -118,7 +119,7 @@ const ChartGAds = ({
           ApiData={ClicksConversionCost[4]}
         />
       </Row>
-      <Row>
+       <Row ref={(el) => setChartRef('gads_active_campaign_performance', el)}> {/* <-- REF ADDED */}
         <ActiveCampaignPerformanceTable
           customerID={googleAdsCustomerId}
           startDate={startDate}
@@ -126,7 +127,7 @@ const ChartGAds = ({
           ApiData={ClicksConversionCost[5]}
         />
       </Row>
-      <Row>
+           <Row ref={(el) => setChartRef('gads_call_performance', el)}> {/* <-- REF ADDED */}
         <CallPerformanceTable
           customerID={googleAdsCustomerId}
           startDate={startDate}
@@ -134,6 +135,7 @@ const ChartGAds = ({
           ApiData={ClicksConversionCost[7]}
         />
       </Row>
+
     </>
   );
 };

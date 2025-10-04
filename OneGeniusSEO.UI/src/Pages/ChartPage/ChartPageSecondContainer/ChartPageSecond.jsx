@@ -157,30 +157,7 @@ const ChartPageSecond = ({
   const [reportType, setReportType] = useState("SEO");
 
   const apibaseurl = import.meta.env.VITE_API_BASE_URL;
-  // const handleDownloadPdf = async () => {
-  //   try {
-  //     setIsGeneratingPdf(true); // Disable the button and show loader
 
-  //     const monthYear = startDate.toLocaleDateString("en-US", {
-  //       month: "long",
-  //       year: "numeric",
-  //     });
-
-  //     const [month, year] = monthYear.split(" ");
-  //     const fileName = `${clientName || "dashboard"} ${
-  //       reportType || "SEO"
-  //     } Report ${month}_${year}.pdf`;
-
-  //     await generatePdfFromElement(pdfContentRef.current, fileName, {
-  //       logging: true,
-  //     });
-
-  //     setIsGeneratingPdf(false); // Re-enable after generation
-  //   } catch (err) {
-  //     setIsGeneratingPdf(false); // Ensure re-enabled on error
-  //     setError("Failed to generate PDF. Please try again.");
-  //   }
-  // };
 
   {/*  Pdf update */ }
   const token = localStorage.getItem("token");
@@ -197,20 +174,27 @@ const ChartPageSecond = ({
     }
 
     const captureImage = async (ref) => {
-        if (!ref) return null;
-        try {
-            const canvas = await html2canvas(ref, { useCORS: true, scale: 3 });
-            return canvas.toDataURL('image/png');
-        } catch (err) {
-            console.error("Error capturing element:", ref.id || ref, err);
-            return null; // Ek chart fail ho toh baaki chalte rahein
-        }
-    };
+    if (!ref) return null;
+    try {
+        const canvas = await html2canvas(ref, {
+            useCORS: true,
+            scale: 2,
+            willReadFrequently: true // <-- Bas isse add karein
+        });
+        return canvas.toDataURL('image/png');
+        
+    } catch (err) {
+        console.error("Error capturing element:", ref.id || ref, err);
+        return null; // Ek chart fail ho toh baaki chalte rahein
+    }
+};
+
 
     try {
         // Sirf visible charts ko capture karne ke liye filter karein
         const chartsToCapture = CHART_CONFIG.filter(chart => {
-            const isIntegrationSelected = shouldRenderChart(chart.integration);
+            // Executive Summary (General) hamesha include hona chahiye
+            const isIntegrationSelected = chart.integration === 'General' || shouldRenderChart(chart.integration);
             const hasRequiredId = 
                 (chart.integration === 'Google Analytics 4' && propertyid) ||
                 (chart.integration === 'Google Search Console' && gsC_id) ||
@@ -419,29 +403,7 @@ const ChartPageSecond = ({
 
       <div ref={visibleRef} className={style.chart_container}>
         <div className="d-flex justify-content-end">
-          {/* <Button
-            variant=""
-            onClick={handleDownloadPdf}
-            disabled={isGeneratingPdf}
-            className={`${style.downloadButton} ${
-              isGeneratingPdf ? "disabled" : ""
-            }`}
-          >
-            {isGeneratingPdf ? (
-              <span>
-                <span
-                  className="spinner-border spinner-border-sm me-2"
-                  role="status"
-                  aria-hidden="true"
-                ></span>
-                Generating PDF...
-              </span>
-            ) : (
-              "Download PDF"
-            )}
-          </Button> */}
-
-          {/* new button for pdf  */}
+        
           <Button
             variant=""
             onClick={handlePreviewPdf}
@@ -451,7 +413,7 @@ const ChartPageSecond = ({
             {isGeneratingPdf ? (
               <>
                 <span
-                  className="spinner-border spinner-border-sm me-2"
+                  // className="spinner-border spinner-border-sm me-2"
                   role="status"
                   aria-hidden="true">Generating Preview </span>
               </>
@@ -529,7 +491,7 @@ const ChartPageSecond = ({
                 </p>
               </div>
             </div>
-            <div className={style.report_title_box}>
+            <div className={style.report_title_box}  ref={(el) => setChartRef('executive_summary', el)}>
               <ExecutiveSummary
                 showSummary={showSummary}
                 summaryText={summaryText}
@@ -614,6 +576,7 @@ const ChartPageSecond = ({
                 GMBAccount_Id={gmbAccount_Id}
                 TotalProfileImpression={TotalProfileImpression}
                 BusinessInteractions={BusinessInteractions}
+                 setChartRef={setChartRef}  // <-- YEH pdf PROP PASS KARNA ZAROORI HAI
               />
             )}
 
@@ -624,6 +587,7 @@ const ChartPageSecond = ({
                 style={style}
                 googleAdsCustomerId={googleAdsCustomerId}
                 ClicksConversionCost={ClicksConversionCost}
+                 setChartRef={setChartRef} // <-- YEH pdf PROP PASS KARNA ZAROORI HAI
               />
             )}
             {shouldRenderChart("Google Adsense") && gAdsensePublisherId && (

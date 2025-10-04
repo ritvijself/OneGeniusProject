@@ -19,6 +19,7 @@ const ChartGMB = ({
   GMBAccount_Id,
   TotalProfileImpression,
   BusinessInteractions,
+  setChartRef, ////pdf
 }) => {
   const [pieChartData, setPieChartData] = useState({
     labels: ["Mobile Search", "Desktop Search", "Mobile Maps", "Desktop Maps"],
@@ -203,6 +204,23 @@ const ChartGMB = ({
     token,
     calculateTotalImpressions,
   ]);
+  // ===== YEH LINES ADD KARNI HAIN =====
+  // PDF Ref IDs: Yeh arrays .map() loop ke andar har chart ko ek unique ID dene ke liye hain.
+  // `index` ka use karke in arrays se sahi ID chuni jaati hai.
+  const profileImpressionIds = ['gmb_impressions_search', 'gmb_impressions_maps'];
+  // Order must match DesktopMaps in GmbApis.js
+  const searchBreakdownIds = [
+    'gmb_desktop_maps',
+    'gmb_desktop_search',
+    'gmb_mobile_maps',
+    'gmb_mobile_search',
+    'gmb_calls_made',
+    'gmb_direction_requests',
+    'gmb_website_clicks',
+  ];
+  const interactionIds = ['gmb_website_clicks', 'gmb_direction_requests', 'gmb_calls_made'];
+
+  // ===================================
 
   return (
     <>
@@ -214,7 +232,8 @@ const ChartGMB = ({
       </div>
 
       <Row className="mt-3">
-        <Col md={4}>
+        {/* Pie charts par alag-alag ref */}
+        <Col md={4} ref={(el) => setChartRef('gmb_pie_platform_device', el)}>
           <GmbPiechart
             title="Platform & Device"
             totalText="Impressions"
@@ -224,7 +243,7 @@ const ChartGMB = ({
             loading={loadingPieData}
           />
         </Col>
-        <Col md={4}>
+        <Col md={4} ref={(el) => setChartRef('gmb_pie_mobile_desktop', el)}>
           <GmbPiechart
             title="Total Mobile vs Desktop"
             totalText="Impressions"
@@ -234,7 +253,7 @@ const ChartGMB = ({
             loading={loadingPieData}
           />
         </Col>
-        <Col md={4}>
+        <Col md={4} ref={(el) => setChartRef('gmb_pie_maps_search', el)}>
           <GmbPiechart
             title="Total Maps vs Search"
             totalText="Impressions"
@@ -245,9 +264,11 @@ const ChartGMB = ({
           />
         </Col>
       </Row>
+      {/* Profile Impressions (2 charts) */}
+
       <Row className="mt-3 ">
-        {TotalProfileImpression.map((data) => (
-          <Col xs={12} md={6} lg={6} className="mt-3 mb-5" key={data.id}>
+        {TotalProfileImpression.map((data, index) => (
+          <Col xs={12} md={6} lg={6} className="mt-3 mb-5" key={data.id} ref={(el) => setChartRef(profileImpressionIds[index], el)}>
             <BarChart
               GMBLocation_Id={GMBLocation_Id}
               GMBAccount_Id={GMBAccount_Id}
@@ -260,7 +281,7 @@ const ChartGMB = ({
           </Col>
         ))}
       </Row>
-
+      {/* Business Interactions (1 chart) */}
       <Row>
         <Col
           xs={12}
@@ -268,7 +289,7 @@ const ChartGMB = ({
           lg={12}
           className="mt-3 mb-5"
           key={BusinessInteractions[0].id}
-        >
+         ref={(el) => setChartRef('gmb_business_interactions', el)} >
           <MetricDisplayGMB
             locationId={GMBLocation_Id}
             accountId={GMBAccount_Id}
@@ -282,8 +303,8 @@ const ChartGMB = ({
         </Col>
       </Row>
       <Row>
-        {DesktopMaps.map((data) => (
-          <Col xs={12} md={6} lg={4} className="mt-3 mb-5" key={data.id}>
+        {DesktopMaps.map((data, index) => (
+          <Col xs={12} md={6} lg={4} className="mt-3 mb-5" key={data.id} ref={(el) => setChartRef(searchBreakdownIds[index], el)}>
             <BarChart
               GMBLocation_Id={GMBLocation_Id}
               GMBAccount_Id={GMBAccount_Id}
@@ -301,3 +322,5 @@ const ChartGMB = ({
 };
 
 export default ChartGMB;
+
+
