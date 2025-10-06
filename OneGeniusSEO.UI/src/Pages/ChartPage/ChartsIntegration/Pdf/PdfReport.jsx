@@ -88,6 +88,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'flex-start',
         marginBottom: 15, // Gap between rows
+            flexWrap: 'wrap', // new gmb issue
+
     },
     col12: { width: '100%' },
     col6: { width: '48%' },
@@ -625,7 +627,7 @@ const gmbChartIds = [
                     {visibleGmbCharts.breakdown4 && <View style={visibleBreakdown2 === 1 ? styles.col12 : styles.col6}><Text style={styles.manualChartTitle}>Mobile Maps</Text><Image style={styles.chartImage} src={documentProps.gmb_mobile_maps} /></View>}
                 </View>
 
-                {/* Row 6: Interaction Bar Charts (Calls, Directions, Website Clicks) */}
+                {/* Row 6: Interaction Bar Charts (Calls, Directions, Website Clicks)
                 {(visibleGmbCharts.calls || visibleGmbCharts.directions || visibleGmbCharts.websiteClicks) && (
                     <View style={styles.row}>
                         {visibleGmbCharts.calls && (
@@ -647,7 +649,32 @@ const gmbChartIds = [
                             </View>
                         )}
                     </View>
-                )}
+                )} */}
+
+                {/* Row 6: Interaction Bar Charts (Calls, Directions, Website Clicks) - UPDATED */}
+{(visibleGmbCharts.calls || visibleGmbCharts.directions || visibleGmbCharts.websiteClicks) && (
+    <View style={styles.row}>
+        {/* Har chart ko col6 (half-width) dein. flexWrap automatically teesre ko wrap kar dega */}
+        {visibleGmbCharts.calls && (
+            <View style={styles.col6}>
+                <Text style={styles.manualChartTitle}>Calls made from GBP</Text>
+                <Image style={styles.chartImage} src={documentProps.gmb_calls_made} />
+            </View>
+        )}
+        {visibleGmbCharts.directions && (
+            <View style={styles.col6}>
+                <Text style={styles.manualChartTitle}>GBP Direction Requests</Text>
+                <Image style={styles.chartImage} src={documentProps.gmb_direction_requests} />
+            </View>
+        )}
+        {visibleGmbCharts.websiteClicks && (
+            <View style={styles.col6}>
+                <Text style={styles.manualChartTitle}>GBP Website Clicks</Text>
+                <Image style={styles.chartImage} src={documentProps.gmb_website_clicks} />
+            </View>
+        )}
+    </View>
+)}
 
                
 
