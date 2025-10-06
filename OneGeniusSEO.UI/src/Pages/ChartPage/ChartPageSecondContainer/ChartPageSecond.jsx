@@ -98,6 +98,8 @@ import PdfPreview from '../../ChartPage/ChartsIntegration/Pdf/pdfPreview';
 ///pdf customization 
 import useDashboardCustomization from "../../CustomizeDashboard/UseDashboardCustomization";
 import { CHART_CONFIG } from "../ChartsIntegration/config/chart.config";
+// <--- STEP 1 se banaya hua Loader component import karein loader
+import Loader from "./Loader/Loader"; // Path ko apne project ke structure ke hisaab se a adjust kar lein
 const ChartPageSecond = ({
   propertyid,
   gsC_id,
@@ -155,6 +157,8 @@ const ChartPageSecond = ({
   const [agencyLogoBase64, setAgencyLogoBase64] = useState("");
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const [reportType, setReportType] = useState("SEO");
+  // <--- STEP 2: Loader ke liye nayi state add karein loader
+  const [isLoaderVisible, setIsLoaderVisible] = useState(false);
 
   const apibaseurl = import.meta.env.VITE_API_BASE_URL;
 
@@ -163,13 +167,18 @@ const ChartPageSecond = ({
   const token = localStorage.getItem("token");
   const { chartConfigurations } = useDashboardCustomization(apibaseurl, token);
 
-  // ChartPageSecond.jsx ke andar...
-  // Purane 'handlePreviewPdf' ko update kiya 
+// <--- STEP 3: handlePreviewPdf function ko update karein loader
   const handlePreviewPdf = async () => {
     setIsGeneratingPdf(true);
+     setIsLoaderVisible(true); // <--- Loader ko yahan show karein
+
+    await new Promise(resolve => setTimeout(resolve, 0));
+
+
     if (!clientName) {
       alert("Client details loading, please wait.");
       setIsGeneratingPdf(false);
+       setIsLoaderVisible(false); 
       return;
     }
 
@@ -249,6 +258,8 @@ const ChartPageSecond = ({
       console.error(err);
     } finally {
       setIsGeneratingPdf(false);
+      setIsLoaderVisible(false); // <--- Process poora hone par (chahe success ho ya fail) loader ko hide karein
+
     }
   };
 
@@ -395,6 +406,8 @@ const ChartPageSecond = ({
 
   return (
     <>
+     {/* <--- Loader ko yahan conditionally render karein */}
+      {isLoaderVisible && <Loader />}
       {/* ////pdffffffffffffffffff  */}
       {showPreview && pdfProps && (
         <PdfPreview documentProps={pdfProps} onClose={() => setshowPreview(false)} />
