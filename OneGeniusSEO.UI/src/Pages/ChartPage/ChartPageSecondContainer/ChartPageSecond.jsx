@@ -134,7 +134,7 @@ const ChartPageSecond = ({
   ////States for Pdf Preview & Props 
   const [showPreview, setshowPreview] = useState(false);
   const [pdfProps, setpdfProps] = useState(null);
-   // <<<<<< pfd  >>>>>>
+  // <<<<<< pfd  >>>>>>
   const chartRefs = useRef({});
   const setChartRef = (id, element) => {
     chartRefs.current[id] = element;
@@ -164,87 +164,91 @@ const ChartPageSecond = ({
   const { chartConfigurations } = useDashboardCustomization(apibaseurl, token);
 
   // ChartPageSecond.jsx ke andar...
-// Purane 'handlePreviewPdf' ko update kiya 
+  // Purane 'handlePreviewPdf' ko update kiya 
   const handlePreviewPdf = async () => {
     setIsGeneratingPdf(true);
     if (!clientName) {
-        alert("Client details loading, please wait.");
-        setIsGeneratingPdf(false);
-        return;
+      alert("Client details loading, please wait.");
+      setIsGeneratingPdf(false);
+      return;
     }
 
     const captureImage = async (ref) => {
-    if (!ref) return null;
-    try {
+      if (!ref) return null;
+      try {
         const canvas = await html2canvas(ref, {
-            useCORS: true,
-            scale: 2,
-            willReadFrequently: true // <-- Bas isse add karein
+          useCORS: true,
+          scale: 2,
+          willReadFrequently: true // <-- Bas isse add karein
         });
         return canvas.toDataURL('image/png');
-        
-    } catch (err) {
+
+      } catch (err) {
         console.error("Error capturing element:", ref.id || ref, err);
         return null; // Ek chart fail ho toh baaki chalte rahein
-    }
-};
+      }
+    };
 
 
     try {
-        // Sirf visible charts ko capture karne ke liye filter karein
-        const chartsToCapture = CHART_CONFIG.filter(chart => {
-            // Executive Summary (General) hamesha include hona chahiye
-            const isIntegrationSelected = chart.integration === 'General' || shouldRenderChart(chart.integration);
-            const hasRequiredId = 
-                (chart.integration === 'Google Analytics 4' && propertyid) ||
-                (chart.integration === 'Google Search Console' && gsC_id) ||
-                (chart.integration === 'YouTube' && ytChannelId) ||
-                !['Google Analytics 4', 'Google Search Console', 'YouTube'].includes(chart.integration);
-            return isIntegrationSelected && hasRequiredId && chartRefs.current[chart.id];
-        });
+      // Sirf visible charts ko capture karne ke liye filter karein
+      const chartsToCapture = CHART_CONFIG.filter(chart => {
+        // Executive Summary (General) hamesha include hona chahiye
+        const isIntegrationSelected = chart.integration === 'General' || shouldRenderChart(chart.integration);
+        const hasRequiredId =
+          (chart.integration === 'Google Analytics 4' && propertyid) ||
+          (chart.integration === 'Google Search Console' && gsC_id) ||
+          (chart.integration === 'YouTube' && ytChannelId) ||
+          (chart.integration === 'Google Ads' && googleAdsCustomerId) || 
+                      (chart.integration === 'Google My Business' && gmbLocation_Id) || // <-- YEH LINE ADD KI HAI
 
-        // Promise.all se sabhi screenshots ek saath (parallel) lein
-        const imagePromises = chartsToCapture.map(chart => 
-            captureImage(chartRefs.current[chart.id]).then(imageData => ({
-                id: chart.id,
-                image: imageData
-            }))
-        );
-        const capturedImagesData = await Promise.all(imagePromises);
 
-        const capturedImages = capturedImagesData.reduce((acc, data) => {
-            if(data.image) acc[data.id] = data.image;
-            return acc;
-        }, {});
+    !['Google Analytics 4', 'Google Search Console', 'YouTube', 'Google Ads', 'Google My Business' ].includes(chart.integration); // <-- 'GOOGLE ADS' YAHAN BHI ADD KAREIN
+        return isIntegrationSelected && hasRequiredId && chartRefs.current[chart.id];
+      });
 
-        // PDF props ko dynamically generate karein
-        const propsForPdf = CHART_CONFIG.reduce((props, chart) => {
-            const integrationConfig = chartConfigurations[chart.integration];
-            
-            // Image Data
-            props[chart.id] = capturedImages[chart.id] || null;
+      // Promise.all se sabhi screenshots ek saath (parallel) lein
+      const imagePromises = chartsToCapture.map(chart =>
+        captureImage(chartRefs.current[chart.id]).then(imageData => ({
+          id: chart.id,
+          image: imageData
+        }))
+      );
+      const capturedImagesData = await Promise.all(imagePromises);
 
-            // Customization (Show/Hide) Data
-            props[`show_${chart.id}`] = integrationConfig?.[chart.configKey]?.selected ?? true;
-            
-            return props;
-        }, {
-            // Common data
-            clientName,
-            websiteAddress,
-            reportDate: startDate.toLocaleDateString("en-US", { month: "long", year: "numeric" }),
-            agencyLogo: agencyLogoBase64,
-            clientLogo: clientLogoBase64,
-        });
-        
-        setpdfProps(propsForPdf);
-        setshowPreview(true);
+      const capturedImages = capturedImagesData.reduce((acc, data) => {
+        if (data.image) acc[data.id] = data.image;
+        return acc;
+      }, {});
+
+      // PDF props ko dynamically generate karein
+      const propsForPdf = CHART_CONFIG.reduce((props, chart) => {
+        const integrationConfig = chartConfigurations[chart.integration];
+
+        // Image Data
+        props[chart.id] = capturedImages[chart.id] || null;
+
+        // Customization (Show/Hide) Data
+        props[`show_${chart.id}`] = integrationConfig?.[chart.configKey]?.selected ?? true;
+
+        return props;
+      }, {
+        // Common data
+        clientName,
+        websiteAddress,
+        reportDate: startDate.toLocaleDateString("en-US", { month: "long", year: "numeric" }),
+        agencyLogo: agencyLogoBase64,
+        clientLogo: clientLogoBase64,
+      });
+
+      setpdfProps(propsForPdf);
+      setshowPreview(true);
 
     } catch (err) {
-        setError("Failed to prepare PDF preview. Please try again.");
-        console.error(err);
+      setError("Failed to prepare PDF preview. Please try again.");
+      console.error(err);
     } finally {
-        setIsGeneratingPdf(false);
+      setIsGeneratingPdf(false);
     }
   };
 
@@ -403,7 +407,7 @@ const ChartPageSecond = ({
 
       <div ref={visibleRef} className={style.chart_container}>
         <div className="d-flex justify-content-end">
-        
+
           <Button
             variant=""
             onClick={handlePreviewPdf}
@@ -413,7 +417,6 @@ const ChartPageSecond = ({
             {isGeneratingPdf ? (
               <>
                 <span
-                  // className="spinner-border spinner-border-sm me-2"
                   role="status"
                   aria-hidden="true">Generating Preview </span>
               </>
@@ -491,7 +494,7 @@ const ChartPageSecond = ({
                 </p>
               </div>
             </div>
-            <div className={style.report_title_box}  ref={(el) => setChartRef('executive_summary', el)}>
+            <div className={style.report_title_box} ref={(el) => setChartRef('executive_summary', el)}>
               <ExecutiveSummary
                 showSummary={showSummary}
                 summaryText={summaryText}
@@ -561,7 +564,7 @@ const ChartPageSecond = ({
                 ExcelSearchQueries={ExcelSearchQueries}
                 Top5SearchQueries={Top5SearchQueries}
                 Top5Pages={Top5Pages}
-                 setChartRef={setChartRef}  //pdf prop
+                setChartRef={setChartRef}  //pdf prop
               />
             )}
 
@@ -576,7 +579,7 @@ const ChartPageSecond = ({
                 GMBAccount_Id={gmbAccount_Id}
                 TotalProfileImpression={TotalProfileImpression}
                 BusinessInteractions={BusinessInteractions}
-                 setChartRef={setChartRef}  // <-- YEH pdf PROP PASS KARNA ZAROORI HAI
+                setChartRef={setChartRef}
               />
             )}
 
@@ -587,7 +590,7 @@ const ChartPageSecond = ({
                 style={style}
                 googleAdsCustomerId={googleAdsCustomerId}
                 ClicksConversionCost={ClicksConversionCost}
-                 setChartRef={setChartRef} // <-- YEH pdf PROP PASS KARNA ZAROORI HAI
+                setChartRef={setChartRef} // <-- YEH pdf PROP PASS KARNA ZAROORI HAI
               />
             )}
             {shouldRenderChart("Google Adsense") && gAdsensePublisherId && (

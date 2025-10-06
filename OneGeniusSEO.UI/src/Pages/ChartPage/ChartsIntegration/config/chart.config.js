@@ -70,7 +70,6 @@ export const CHART_CONFIG = [
   { id: 'gads_active_campaign_performance', integration: 'Google Ads', configKey: 'GAdsApi007' },
   { id: 'gads_call_performance', integration: 'Google Ads', configKey: 'GAdsApi008' },
 
-
   //-----Google My Business -----
   { id: 'gmb_pie_platform_device', integration: 'Google My Business', configKey: 'GMBApi001' },
     { id: 'gmb_pie_mobile_desktop', integration: 'Google My Business', configKey: 'GMBApi002' },
@@ -85,8 +84,9 @@ export const CHART_CONFIG = [
     { id: 'gmb_calls_made', integration: 'Google My Business', configKey: 'GMBApi005' },
     { id: 'gmb_direction_requests', integration: 'Google My Business', configKey: 'GMBApi006' },
     { id: 'gmb_website_clicks', integration: 'Google My Business', configKey: 'GMBApi007' },
+  //Executive Summary 
 
-
+ 
   
   //Executive Summary 
     { id: 'executive_summary', integration: 'General', configKey: 'ExecSummary001' },

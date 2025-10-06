@@ -322,5 +322,3 @@ const ChartGMB = ({
 };
 
 export default ChartGMB;
-
-

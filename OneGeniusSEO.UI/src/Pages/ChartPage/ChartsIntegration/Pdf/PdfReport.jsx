@@ -1,7 +1,6 @@
 
 import React from "react";
 import { Document, Page, Text, View, Image, StyleSheet, G } from "@react-pdf/renderer";
-// import { CHART_CONFIG } from "../config/chart.config"; // For YT and GA4
 
 
 const styles = StyleSheet.create({
@@ -123,14 +122,15 @@ const PdfReport = ({ documentProps }) => {
     const gadsChartIds = [
         'gads_summary_cards', 'gads_three_month_trend', 'gads_performance_by_device', 'gads_keyword_performance', 'gads_landing_page_performance', 'gads_campaign_type_performance', 'gads_active_campaign_performance', 'gads_call_performance'
     ];
+const gmbChartIds = [
+    'gmb_pie_platform_device', 'gmb_pie_mobile_desktop', 'gmb_pie_maps_search',
+    'gmb_impressions_search', 'gmb_impressions_maps',
+    'gmb_business_interactions',
+    'gmb_desktop_search', 'gmb_mobile_search', 'gmb_desktop_maps', 'gmb_mobile_maps',
+    'gmb_calls_made', 'gmb_direction_requests', 'gmb_website_clicks'
+];
 
-    const gmbChartIds = [
-        'gmb_pie_platform_device', 'gmb_pie_mobile_desktop', 'gmb_pie_maps_search',
-        'gmb_impressions_search', 'gmb_impressions_maps',
-        'gmb_business_interactions',
-        'gmb_desktop_search', 'gmb_mobile_search', 'gmb_desktop_maps', 'gmb_mobile_maps',
-        'gmb_calls_made', 'gmb_direction_requests', 'gmb_website_clicks'
-    ];
+
 
 
 
@@ -146,7 +146,8 @@ const PdfReport = ({ documentProps }) => {
     const anyYtVisible = isSectionVisible(ytChartIds);
     const anyGa4Visible = isSectionVisible(ga4ChartIds);
     const anyGadsVisible = isSectionVisible(gadsChartIds);
-    const anyGmbVisible = isSectionVisible(gmbChartIds);
+        const anyGmbVisible = isSectionVisible(gmbChartIds);
+
 
 
     // Visibility check waise hi rahega
@@ -160,30 +161,36 @@ const PdfReport = ({ documentProps }) => {
 
 
     // ===== GMB Charts ki visibility pehle se check kar lein =====
-    //    GMB Charts ki visibility pehle se check kar lein
-    const visibleGmbCharts = {
-        pie1: documentProps.show_gmb_pie_platform_device === true && isValidImageData(documentProps.gmb_pie_platform_device),
-        pie2: documentProps.show_gmb_pie_mobile_desktop === true && isValidImageData(documentProps.gmb_pie_mobile_desktop),
-        pie3: documentProps.show_gmb_pie_maps_search === true && isValidImageData(documentProps.gmb_pie_maps_search),
-        imp1: documentProps.show_gmb_impressions_search === true && isValidImageData(documentProps.gmb_impressions_search),
-        imp2: documentProps.show_gmb_impressions_maps === true && isValidImageData(documentProps.gmb_impressions_maps),
-        interactions: documentProps.show_gmb_business_interactions === true && isValidImageData(documentProps.gmb_business_interactions),
-        breakdown1: documentProps.show_gmb_desktop_search === true && isValidImageData(documentProps.gmb_desktop_search),
-        breakdown2: documentProps.show_gmb_mobile_search === true && isValidImageData(documentProps.gmb_mobile_search),
-        breakdown3: documentProps.show_gmb_desktop_maps === true && isValidImageData(documentProps.gmb_desktop_maps),
-        breakdown4: documentProps.show_gmb_mobile_maps === true && isValidImageData(documentProps.gmb_mobile_maps),
-        calls: documentProps.show_gmb_calls_made === true && isValidImageData(documentProps.gmb_calls_made),
-        directions: documentProps.show_gmb_direction_requests === true && isValidImageData(documentProps.gmb_direction_requests),
-        websiteClicks: documentProps.show_gmb_website_clicks === true && isValidImageData(documentProps.gmb_website_clicks),
-    };
+   // GMB Charts ki visibility pehle se check kar lein
+   const visibleGmbCharts = {
+    pie1: documentProps.show_gmb_pie_platform_device === true && isValidImageData(documentProps.gmb_pie_platform_device),
+    pie2: documentProps.show_gmb_pie_mobile_desktop === true && isValidImageData(documentProps.gmb_pie_mobile_desktop),
+    pie3: documentProps.show_gmb_pie_maps_search === true && isValidImageData(documentProps.gmb_pie_maps_search),
+    imp1: documentProps.show_gmb_impressions_search === true && isValidImageData(documentProps.gmb_impressions_search),
+    imp2: documentProps.show_gmb_impressions_maps === true && isValidImageData(documentProps.gmb_impressions_maps),
+    interactions: documentProps.show_gmb_business_interactions === true && isValidImageData(documentProps.gmb_business_interactions),
+    breakdown1: documentProps.show_gmb_desktop_search === true && isValidImageData(documentProps.gmb_desktop_search),
+    breakdown2: documentProps.show_gmb_mobile_search === true && isValidImageData(documentProps.gmb_mobile_search),
+    breakdown3: documentProps.show_gmb_desktop_maps === true && isValidImageData(documentProps.gmb_desktop_maps),
+      breakdown4: documentProps.show_gmb_mobile_maps === true && isValidImageData(documentProps.gmb_mobile_maps),
+      calls: documentProps.show_gmb_calls_made === true && isValidImageData(documentProps.gmb_calls_made),
+      directions: documentProps.show_gmb_direction_requests === true && isValidImageData(documentProps.gmb_direction_requests),
+      websiteClicks: documentProps.show_gmb_website_clicks === true && isValidImageData(documentProps.gmb_website_clicks),
+};
+
+ 
     // Helper to count visible charts in a group
     const countVisible = (charts) => charts.filter(c => c).length;
+
+     // Helper to count visible charts in a group
+    // const countVisible = (charts) => charts.filter(c => c).length;
 
     const visiblePies = countVisible([visibleGmbCharts.pie1, visibleGmbCharts.pie2, visibleGmbCharts.pie3]);
     const visibleImpressions = countVisible([visibleGmbCharts.imp1, visibleGmbCharts.imp2]);
     const visibleBreakdown1 = countVisible([visibleGmbCharts.breakdown1, visibleGmbCharts.breakdown2]);
     const visibleBreakdown2 = countVisible([visibleGmbCharts.breakdown3, visibleGmbCharts.breakdown4]);
     const visibleInteractionBars = countVisible([visibleGmbCharts.calls, visibleGmbCharts.directions, visibleGmbCharts.websiteClicks]);
+
     // ===== NEW: GA4 Charts ki visibility pehle se check kar lein =====
     const visibleGa4Charts = {
         channelSessionTable: isChartVisible('ga4_channelsessiontable'), threeMonthTrend: isChartVisible('ga4_linechartga4threemonth'),
@@ -231,8 +238,6 @@ const PdfReport = ({ documentProps }) => {
                     {reportDate && <Text style={styles.reportDate}>Monthly Report - {reportDate}</Text>}
                 </View>
 
-                {/* ===== YAHAN EXECUTIVE SUMMARY KA SECTION ADD KAREIN ===== */}
-                {/* Executive Summary Image */}
                 {documentProps.show_executive_summary === true && isValidImageData(documentProps.executive_summary) && (
                     <View style={{ marginTop: 15 }}>
                         {/* <Text style={styles.manualChartTitle}>Executive Summary</Text> */}
@@ -240,9 +245,7 @@ const PdfReport = ({ documentProps }) => {
                     </View>
                 )}
 
-                {/* ================================================================= */}
                 {/* Section 2: Google Search Console (FULLY MANUAL with 9 charts)   */}
-                {/* ================================================================= */}
                 {anyGscVisible && (
                     <View style={styles.sectionHeader} break>
                         <Text style={styles.sectionHeaderText}>Website Monitoring and Performance</Text>
@@ -417,7 +420,7 @@ const PdfReport = ({ documentProps }) => {
                     )}
                 </View>
 
-                {visibleGa4Charts.campaignTable && <View style={styles.row}><View style={styles.col12}>
+                {visibleGa4Charts.campaignTable && <View style={styles.row} break><View style={styles.col12}>
                     {/* <Text style={styles.manualChartTitle}>Campaign Performance</Text> */}
                     <Image style={styles.chartImage} src={documentProps.ga4_devicetable} /></View></View>}
 
@@ -464,10 +467,6 @@ const PdfReport = ({ documentProps }) => {
                     </View>
                 )}
 
-                {/* --- Engagement & Key Events in Separate Rows --- */}
-
-                {/* --- Engagement & Key Events in Separate Rows --- */}
-
                 {/* Chart 1 - Pehli Row (Full Width) */}
                 {isChartVisible('ga4_progressbar6') && (
                     <View style={styles.row} break>
@@ -488,12 +487,12 @@ const PdfReport = ({ documentProps }) => {
                     </View>
                 )}
 
-                {visibleGa4Charts.languageProgress && <View style={styles.row}><View style={styles.col12}>
+                {visibleGa4Charts.languageProgress && <View style={styles.row} break><View style={styles.col12}>
                     {/* <Text style={styles.manualChartTitle}>Users by Language</Text> */}
                     <Image style={styles.chartImage} src={documentProps.ga4_progressbar2} /></View></View>}
 
                 {/* --- Technology --- */}
-                {visibleGa4Charts.deviceBrowser && <View style={styles.row}><View style={styles.col12}>
+                {visibleGa4Charts.deviceBrowser && <View style={styles.row} break><View style={styles.col12}>
                     {/* <Text style={styles.manualChartTitle}>Users by Device & Browser</Text> */}
                     <Image style={styles.chartImage} src={documentProps.ga4_devivebrowserchart} /></View></View>}
                 {(ga4Row7 > 0) && <View style={styles.row}>
@@ -536,7 +535,7 @@ const PdfReport = ({ documentProps }) => {
                         <Image style={styles.chartImage} src={documentProps.ga4_linechartga42} /></View>}
                     {visibleGa4Charts.pageUsersProgress && <View style={ga4Row10 === 1 ? styles.col12 : styles.col6}><Text style={styles.manualChartTitle}>Users by Page</Text><Image style={styles.chartImage} src={documentProps.ga4_progressbar4} /></View>}
                 </View>}
-                {(ga4Row11 > 0) && <View style={styles.row}>
+                {(ga4Row11 > 0) && <View style={styles.row} break>
                     {visibleGa4Charts.pageViewsProgress && <View style={ga4Row11 === 1 ? styles.col12 : styles.col6}>
                         {/* <Text style={styles.manualChartTitle}>Views by Page Title</Text> */}
                         <Image style={styles.chartImage} src={documentProps.ga4_progressbar5} /></View>}
@@ -585,7 +584,8 @@ const PdfReport = ({ documentProps }) => {
                     <View><Text style={styles.manualChartTitle}>Call Performance</Text><Image style={styles.chartImage} src={documentProps.gads_call_performance} /></View>
                 )}
 
-                {/* ================================================================= */}
+
+ {/* ================================================================= */}
                 {/* Section: Google My Business (Row/Column Layout)                 */}
                 {/* ================================================================= */}
                 {anyGmbVisible && (
@@ -595,7 +595,7 @@ const PdfReport = ({ documentProps }) => {
                     </View>
                 )}
 
-                {/* Row 1: Three Pie Charts (Smart Layout) */}
+               {/* Row 1: Three Pie Charts (Smart Layout) */}
                 <View style={styles.row}>
                     {visibleGmbCharts.pie1 && <View style={visiblePies === 1 ? styles.col12 : visiblePies === 2 ? styles.col6 : styles.col4}><Text style={styles.manualChartTitle}>Platform & Device</Text><Image style={styles.chartImage} src={documentProps.gmb_pie_platform_device} /></View>}
                     {visibleGmbCharts.pie2 && <View style={visiblePies === 1 ? styles.col12 : visiblePies === 2 ? styles.col6 : styles.col4}><Text style={styles.manualChartTitle}>Mobile vs Desktop</Text><Image style={styles.chartImage} src={documentProps.gmb_pie_mobile_desktop} /></View>}
@@ -648,6 +648,8 @@ const PdfReport = ({ documentProps }) => {
                         )}
                     </View>
                 )}
+
+               
 
 
 
