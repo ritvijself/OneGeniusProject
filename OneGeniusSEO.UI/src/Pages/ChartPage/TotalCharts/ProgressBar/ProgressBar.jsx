@@ -343,6 +343,9 @@ const ProgressBar = ({
   const totalClicks = queriesData.reduce((sum, item) => sum + item.click, 0);
 
   return (
+    //added shadow
+        <div className="card shadow-sm  h-100">
+
     <div className={style.progressbar_box} style={{ height: height }}>
       <div className="d-flex align-items-center mb-3">
         <div
@@ -356,7 +359,7 @@ const ProgressBar = ({
         queriesData.map((item, index) => {
           const pct = totalClicks > 0 ? (item.click / totalClicks) * 100 : 0;
           return (
-            <div key={index} className="mb-3">
+            <div key={index} className="mb-3" >
               <div className="d-flex justify-content-between align-items-center">
                 <div style={{ fontSize: 11, fontWeight: 500, color: "#444" }}>
                   <span
@@ -407,11 +410,13 @@ const ProgressBar = ({
                 ></div>
               </div>
             </div>
+            
           );
         })
       ) : (
         <p className="text-muted text-center">No data available</p>
       )}
+    </div>
     </div>
   );
 };

@@ -71,6 +71,8 @@ const GmbPiechart = ({
   }
 
   return (
+    //added class
+      <div className="card shadow-sm  p-3  h-100">
     <div className="p-3 rounded shadow-sm bg-white h-100">
       <h5
         className="mb-3"
@@ -122,6 +124,7 @@ const GmbPiechart = ({
           </ul>
         </div>
       </div>
+    </div>
     </div>
   );
 };

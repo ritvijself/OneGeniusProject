@@ -154,6 +154,8 @@ const PdfReport = ({ documentProps }) => {
 
 
 
+
+
     // Visibility check waise hi rahega
     const isChannelTableVisible = documentProps.show_ga4_channelsessiontable === true && isValidImageData(documentProps.ga4_channelsessiontable);
     const isTrendChartVisible = documentProps.show_ga4_linechartga4threemonth === true && isValidImageData(documentProps.ga4_linechartga4threemonth);
@@ -228,6 +230,51 @@ const PdfReport = ({ documentProps }) => {
     const ga4Row9 = countVisible([visibleGa4Charts.multiLine2, visibleGa4Charts.deviceBrowser2, visibleGa4Charts.contactForm]);
     const ga4Row10 = countVisible([visibleGa4Charts.sessionsLine, visibleGa4Charts.pageUsersProgress]);
     const ga4Row11 = countVisible([visibleGa4Charts.pageViewsProgress, visibleGa4Charts.pageViewDay]);
+
+    // heading common 
+    // Add this with your other visibility constants (like anyGscVisible, etc.)
+    const anyEngagementVisible =
+        visibleGa4Charts.lineChart ||
+        visibleGa4Charts.filledLineChart ||
+        visibleGa4Charts.activeUsers ||
+        visibleGa4Charts.newUsers ||
+        visibleGa4Charts.avgEngagement ||
+        visibleGa4Charts.bounceBox ||
+        visibleGa4Charts.conversions;
+
+    const anyAudienceVisible =
+        isChartVisible('ga4_worldmapchart') ||
+        visibleGa4Charts.countryProgress ||
+        visibleGa4Charts.cityProgress ||
+        isChartVisible('ga4_language_progress_0') ||
+        isChartVisible('ga4_language_progress_1') ||
+        isChartVisible('ga4_language_progress_2') ||
+        isChartVisible('ga4_progressbar6') ||
+        isChartVisible('ga4_devicesessionschart') ||
+        visibleGa4Charts.languageProgress ||
+        visibleGa4Charts.deviceBrowser;
+
+
+    const anyDeviceVisible =
+        visibleGa4Charts.deviceSessions ||
+        visibleGa4Charts.engProgress1 ||
+        visibleGa4Charts.engProgress2 ||
+        visibleGa4Charts.deviceBounce ||
+        visibleGa4Charts.multiLine1 ||
+        isChartVisible('ga4_devicetable1') ||
+        visibleGa4Charts.multiLine2 ||
+        visibleGa4Charts.deviceBrowser2 ||
+        visibleGa4Charts.contactForm;
+
+
+
+    const anyPagesVisible =
+        visibleGa4Charts.sessionsLine ||
+        visibleGa4Charts.pageUsersProgress ||
+        visibleGa4Charts.pageViewsProgress ||
+        visibleGa4Charts.pageViewDay ||
+        visibleGa4Charts.pageTrafficTable;
+
     return (
         <Document>
             <Page size="A4" style={styles.page}>
@@ -353,10 +400,14 @@ const PdfReport = ({ documentProps }) => {
                     <View><Image style={styles.chartImage} src={documentProps.yt_likesCard} /></View>
                 )}
                 {documentProps.show_yt_engagementTable === true && isValidImageData(documentProps.yt_engagementTable) && (
-                    <View ><Text style={styles.manualChartTitle}>Engagement by Country</Text><Image style={styles.chartImage} src={documentProps.yt_engagementTable} /></View>
+                    <View >
+                        {/* <Text style={styles.manualChartTitle}>Engagement by Country</Text> */}
+                        <Image style={styles.chartImage} src={documentProps.yt_engagementTable} /></View>
                 )}
                 {documentProps.show_yt_likesTrend === true && isValidImageData(documentProps.yt_likesTrend) && (
-                    <View break><Text style={styles.manualChartTitle}>Likes Trend</Text><Image style={styles.chartImage} src={documentProps.yt_likesTrend} /></View>
+                    <View break>
+                        {/* <Text style={styles.manualChartTitle}>Likes Trend</Text> */}
+                        <Image style={styles.chartImage} src={documentProps.yt_likesTrend} /></View>
                 )}
 
 
@@ -371,90 +422,111 @@ const PdfReport = ({ documentProps }) => {
                     {visibleGa4Charts.channelSessionTable && <View style={ga4Row1 === 1 ? styles.col12 : styles.col6}>
                         {/* <Text style={styles.manualChartTitle}>Sessions by Channel</Text> */}
                         <Image style={styles.chartImage} src={documentProps.ga4_channelsessiontable} /></View>}
-                    {visibleGa4Charts.threeMonthTrend && <View style={ga4Row1 === 1 ? styles.col12 : styles.col6}><Text style={styles.manualChartTitle}>3-Month User Trend</Text><Image style={styles.chartImage} src={documentProps.ga4_linechartga4threemonth} /></View>}
+                    {visibleGa4Charts.threeMonthTrend && <View style={ga4Row1 === 1 ? styles.col12 : styles.col6}>
+                        {/* <Text style={styles.manualChartTitle}>3-Month User Trend</Text> */}
+                        <Image style={styles.chartImage} src={documentProps.ga4_linechartga4threemonth} /></View>}
                 </View>}
                 {visibleGa4Charts.metricDisplay && <View style={styles.row}><View style={styles.col12}>
                     {/* <Text style={styles.manualChartTitle}>Key Metrics Overview</Text> */}
                     <Image style={styles.chartImage} src={documentProps.ga4_metricdisplayga4} /></View></View>}
-                {visibleGa4Charts.channelTable && <View style={styles.row}><View style={styles.col12}><Text style={styles.manualChartTitle}>Traffic by Channel</Text><Image style={styles.chartImage} src={documentProps.ga4_channeltable} /></View></View>}
-
+                {visibleGa4Charts.channelTable && <View style={styles.row}><View style={styles.col12}>
+                    {/* <Text style={styles.manualChartTitle}>Traffic by Channel</Text> */}
+                    <Image style={styles.chartImage} src={documentProps.ga4_channeltable} /></View></View>}
+                {/* /heading start/ */}
                 {/* --- Engagement & Conversions --- */}
-                {(ga4Row2 > 0) && <View style={styles.row}>
-                    {visibleGa4Charts.lineChart && <View style={ga4Row2 === 1 ? styles.col12 : styles.col6}>
-                        {/* <Text style={styles.manualChartTitle}>Engaged Sessions</Text> */}
-                        <Image style={styles.chartImage} src={documentProps.ga4_linechartga4} /></View>}
-                    {visibleGa4Charts.filledLineChart && <View style={ga4Row2 === 1 ? styles.col12 : styles.col6}>
-                        {/* <Text style={styles.manualChartTitle}>User Engagement Trend</Text> */}
-                        <Image style={styles.chartImage} src={documentProps.ga4_linechartfilledga4} /></View>}
-                </View>}
-                {/* --- DEBUGGING KE LIYE TEMPORARY CODE ---///new code  */}
-                <View style={styles.row} wrap={false}>
+                {/* Show heading only if any chart in this section is visible */}
+                {anyEngagementVisible && (
+                    <View style={styles.sectionHeader} >
+                        <Text style={styles.sectionHeaderText}>Conversion</Text>
+                    </View>
+                )}
 
-                    {/* Pehla Chart (Active Users) */}
-                    {visibleGa4Charts.activeUsers &&
-                        <View style={styles.col6}>
-                            <Image style={styles.chartImage} src={documentProps.ga4_barchartactiveuser} />
+                {/* Row 1 */}
+                {(ga4Row2 > 0) && (
+                    <View wrap={false}>
+                        <View style={styles.row}>
+                            {visibleGa4Charts.lineChart && (
+                                <View style={ga4Row2 === 1 ? styles.col12 : styles.col6}>
+                                    <Image style={styles.chartImage} src={documentProps.ga4_linechartga4} />
+                                </View>
+                            )}
+                            {visibleGa4Charts.filledLineChart && (
+                                <View style={ga4Row2 === 1 ? styles.col12 : styles.col6}>
+                                    <Image style={styles.chartImage} src={documentProps.ga4_linechartfilledga4} />
+                                </View>
+                            )}
                         </View>
-                    }
+                    </View>
+                )}
 
-                    {/* Doosra Chart (New Users) */}
-                    {visibleGa4Charts.newUsers &&
-                        <View style={styles.col6}>
-                            <Image style={styles.chartImage} src={documentProps.ga4_linechartga41} />
+                {/* Row 2 */}
+                {(visibleGa4Charts.activeUsers || visibleGa4Charts.newUsers) && (
+                    <View wrap={false}>
+                        <View style={styles.row}>
+                            {visibleGa4Charts.activeUsers && (
+                                <View style={styles.col6}>
+                                    <Image style={styles.chartImage} src={documentProps.ga4_barchartactiveuser} />
+                                </View>
+                            )}
+                            {visibleGa4Charts.newUsers && (
+                                <View style={styles.col6}>
+                                    <Image style={styles.chartImage} src={documentProps.ga4_linechartga41} />
+                                </View>
+                            )}
                         </View>
-                    }
+                    </View>
+                )}
 
-                </View>
-
-
-                {/* Yeh Parent View dono columns ko side-by-side rakhta hai new code */}
-                <View style={styles.row} wrap={false}>
-
-                    {/* ===== COLUMN 1: Left Side (Wider Chart) ===== */}
-                    {visibleGa4Charts.avgEngagement && (
-                        <View style={{ width: '65%' }}>
-                            <Image
-                                style={styles.chartImage}
-                                src={documentProps.ga4_avgengagementbarchart}
-                            />
-                        </View>
-                    )}
-
-                    {/* ===== COLUMN 2: Right Side (Two Stacked Charts) ===== */}
-                    {(visibleGa4Charts.bounceBox || visibleGa4Charts.conversions) && (
-                        <View style={{ width: '31%' }}>
-
-                            {/* Chart 1 in Right Column */}
-                            {visibleGa4Charts.bounceBox && (
-                                <View>
+                {/* Row 3 */}
+                {(visibleGa4Charts.avgEngagement || visibleGa4Charts.bounceBox || visibleGa4Charts.conversions) && (
+                    <View wrap={false}>
+                        <View style={styles.row}>
+                            {/* Left Column */}
+                            {visibleGa4Charts.avgEngagement && (
+                                <View style={{ width: '65%' }}>
                                     <Image
                                         style={styles.chartImage}
-                                        src={documentProps.ga4_bounceengagementmetricbox}
+                                        src={documentProps.ga4_avgengagementbarchart}
                                     />
                                 </View>
                             )}
-
-                            {/* Chart 2 in Right Column */}
-                            {visibleGa4Charts.conversions && (
-                                <View>
-                                    <Image
-                                        style={styles.chartImage}
-                                        src={documentProps.ga4_conversiondata}
-                                    />
+                            {/* Right Column */}
+                            {(visibleGa4Charts.bounceBox || visibleGa4Charts.conversions) && (
+                                <View style={{ width: '31%' }}>
+                                    {visibleGa4Charts.bounceBox && (
+                                        <View>
+                                            <Image
+                                                style={styles.chartImage}
+                                                src={documentProps.ga4_bounceengagementmetricbox}
+                                            />
+                                        </View>
+                                    )}
+                                    {visibleGa4Charts.conversions && (
+                                        <View>
+                                            <Image
+                                                style={styles.chartImage}
+                                                src={documentProps.ga4_conversiondata}
+                                            />
+                                        </View>
+                                    )}
                                 </View>
                             )}
-
                         </View>
-                    )}
-
-                </View>
-
+                    </View>
+                )}
+                {/* /heading end/ */}
                 {visibleGa4Charts.campaignTable && <View style={styles.row} ><View style={styles.col12}>
                     {/* <Text style={styles.manualChartTitle}>Campaign Performance</Text> */}
                     <Image style={styles.chartImage} src={documentProps.ga4_devicetable} /></View></View>}
 
-                {/* --- Audience --- */}
-                {/* Parent View jo teeno charts ko ek row mein rakhega */}
+                {/* Heading start -2 Where your Vistors are Located */}
+                {/* --- Audience / Location Section --- */}
+                {/* Show heading only if any chart in this section is visible */}
+                {anyAudienceVisible && (
+                    <View style={styles.sectionHeader} >
+                        <Text style={styles.sectionHeaderText}>Where Your Visitors Are Located</Text>
+                    </View>
+                )}
                 <View style={styles.row} wrap={false}>
 
                     {/* Chart 1: World Map (Bada Size) */}
@@ -488,8 +560,7 @@ const PdfReport = ({ documentProps }) => {
                     )}
 
                 </View>
-                {/* --- Combined Row for Language, Engagement, and Key Events --- */}
-                {/* Check if any of the charts in this combined row are visible */}
+
                 {(
                     isChartVisible('ga4_language_progress_0') || isChartVisible('ga4_language_progress_1') || isChartVisible('ga4_language_progress_2') ||
                     isChartVisible('ga4_progressbar6') ||
@@ -559,8 +630,17 @@ const PdfReport = ({ documentProps }) => {
                     </View>
                 )}
 
+                {/* heading -2 finish */}
 
 
+                {/* Heading Three Start Devices */}
+                {/* --- Devices Section --- */}
+                {/* Show heading only if any chart in this section is visible */}
+                {anyDeviceVisible && (
+                    <View style={styles.sectionHeader} >
+                        <Text style={styles.sectionHeaderText}>Devices</Text>
+                    </View>
+                )}
 
                 {(ga4Row7 > 0) && (
                     // This parent View will keep the entire row together
@@ -588,9 +668,6 @@ const PdfReport = ({ documentProps }) => {
                         </View>
                     </View>
                 )}
-
-
-
 
                 {(ga4Row8 > 0) && (
                     // This parent View keeps the row from splitting across a page
@@ -650,6 +727,14 @@ const PdfReport = ({ documentProps }) => {
                             )}
 
                         </View>
+                    </View>
+                )}
+                {/* Website Pages Accessed by The User Heading Start */}
+                {/* --- Pages & Screens Section --- */}
+                {/* Show heading only if any chart in this section is visible */}
+                {anyPagesVisible && (
+                    <View style={styles.sectionHeader} >
+                        <Text style={styles.sectionHeaderText}>Website Pages Accessed By The User</Text>
                     </View>
                 )}
 
@@ -733,25 +818,39 @@ const PdfReport = ({ documentProps }) => {
                     <View><Text style={styles.manualChartTitle}>Campaign Performance Overview</Text><Image style={styles.chartImage} src={documentProps.gads_summary_cards} /></View>
                 )}
                 {documentProps.show_gads_three_month_trend === true && isValidImageData(documentProps.gads_three_month_trend) && (
-                    <View><Text style={styles.manualChartTitle}>3-Month Cost & Conversion Trend</Text><Image style={styles.chartImage} src={documentProps.gads_three_month_trend} /></View>
+                    <View>
+                        {/* <Text style={styles.manualChartTitle}>3-Month Cost & Conversion Trend</Text> */}
+                        <Image style={styles.chartImage} src={documentProps.gads_three_month_trend} /></View>
                 )}
                 {documentProps.show_gads_performance_by_device === true && isValidImageData(documentProps.gads_performance_by_device) && (
-                    <View ><Text style={styles.manualChartTitle}>Performance by Device</Text><Image style={styles.chartImage} src={documentProps.gads_performance_by_device} /></View>
+                    <View >
+                        {/* <Text style={styles.manualChartTitle}>Performance by Device</Text> */}
+                        <Image style={styles.chartImage} src={documentProps.gads_performance_by_device} /></View>
                 )}
                 {documentProps.show_gads_keyword_performance === true && isValidImageData(documentProps.gads_keyword_performance) && (
-                    <View ><Text style={styles.manualChartTitle}>Keyword Performance</Text><Image style={styles.chartImage} src={documentProps.gads_keyword_performance} /></View>
+                    <View >
+                        {/* <Text style={styles.manualChartTitle}>Keyword Performance</Text> */}
+                        <Image style={styles.chartImage} src={documentProps.gads_keyword_performance} /></View>
                 )}
                 {documentProps.show_gads_landing_page_performance === true && isValidImageData(documentProps.gads_landing_page_performance) && (
-                    <View break><Text style={styles.manualChartTitle}>Landing Page Performance</Text><Image style={styles.chartImage} src={documentProps.gads_landing_page_performance} /></View>
+                    <View break>
+                        {/* <Text style={styles.manualChartTitle}>Landing Page Performance</Text> */}
+                        <Image style={styles.chartImage} src={documentProps.gads_landing_page_performance} /></View>
                 )}
                 {documentProps.show_gads_campaign_type_performance === true && isValidImageData(documentProps.gads_campaign_type_performance) && (
-                    <View><Text style={styles.manualChartTitle}>Performance by Campaign Type</Text><Image style={styles.chartImage} src={documentProps.gads_campaign_type_performance} /></View>
+                    <View>
+                        {/* <Text style={styles.manualChartTitle}>Performance by Campaign Type</Text> */}
+                        <Image style={styles.chartImage} src={documentProps.gads_campaign_type_performance} /></View>
                 )}
                 {documentProps.show_gads_active_campaign_performance === true && isValidImageData(documentProps.gads_active_campaign_performance) && (
-                    <View ><Text style={styles.manualChartTitle}>Active Campaign Performance</Text><Image style={styles.chartImage} src={documentProps.gads_active_campaign_performance} /></View>
+                    <View >
+                        {/* <Text style={styles.manualChartTitle}>Active Campaign Performance</Text> */}
+                        <Image style={styles.chartImage} src={documentProps.gads_active_campaign_performance} /></View>
                 )}
                 {documentProps.show_gads_call_performance === true && isValidImageData(documentProps.gads_call_performance) && (
-                    <View><Text style={styles.manualChartTitle}>Call Performance</Text><Image style={styles.chartImage} src={documentProps.gads_call_performance} /></View>
+                    <View>
+                        {/* <Text style={styles.manualChartTitle}>Call Performance</Text> */}
+                        <Image style={styles.chartImage} src={documentProps.gads_call_performance} /></View>
                 )}
 
 
@@ -765,36 +864,118 @@ const PdfReport = ({ documentProps }) => {
                     </View>
                 )}
 
-                {/* Row 1: Three Pie Charts (Smart Layout) */}
-                <View style={styles.row}>
-                    {visibleGmbCharts.pie1 && <View style={visiblePies === 1 ? styles.col12 : visiblePies === 2 ? styles.col6 : styles.col4}><Text style={styles.manualChartTitle}>Platform & Device</Text><Image style={styles.chartImage} src={documentProps.gmb_pie_platform_device} /></View>}
-                    {visibleGmbCharts.pie2 && <View style={visiblePies === 1 ? styles.col12 : visiblePies === 2 ? styles.col6 : styles.col4}><Text style={styles.manualChartTitle}>Mobile vs Desktop</Text><Image style={styles.chartImage} src={documentProps.gmb_pie_mobile_desktop} /></View>}
-                    {visibleGmbCharts.pie3 && <View style={visiblePies === 1 ? styles.col12 : visiblePies === 2 ? styles.col6 : styles.col4}><Text style={styles.manualChartTitle}>Maps vs Search</Text><Image style={styles.chartImage} src={documentProps.gmb_pie_maps_search} /></View>}
-                </View>
+                {/* Row 1: Three Pie Charts (Smart Layout & No Page Break) */}
+                <View wrap={false}>
+                    <View style={styles.row}>
 
-                {/* Row 2: Two Impression Bar Charts (Smart Layout) */}
-                <View style={styles.row}>
-                    {visibleGmbCharts.imp1 && <View style={visibleImpressions === 1 ? styles.col12 : styles.col6}><Text style={styles.manualChartTitle}>Impressions (Search)</Text><Image style={styles.chartImage} src={documentProps.gmb_impressions_search} /></View>}
-                    {visibleGmbCharts.imp2 && <View style={visibleImpressions === 1 ? styles.col12 : styles.col6}><Text style={styles.manualChartTitle}>Impressions (Maps)</Text><Image style={styles.chartImage} src={documentProps.gmb_impressions_maps} /></View>}
-                </View>
+                        {visibleGmbCharts.pie1 && (
+                            <View style={visiblePies === 1 ? styles.col12 : visiblePies === 2 ? styles.col6 : styles.col4}>
+                                <Image
+                                    style={styles.chartImage}
+                                    src={documentProps.gmb_pie_platform_device}
+                                />
+                            </View>
+                        )}
 
+                        {visibleGmbCharts.pie2 && (
+                            <View style={visiblePies === 1 ? styles.col12 : visiblePies === 2 ? styles.col6 : styles.col4}>
+                                <Image
+                                    style={styles.chartImage}
+                                    src={documentProps.gmb_pie_mobile_desktop}
+                                />
+                            </View>
+                        )}
+
+                        {visibleGmbCharts.pie3 && (
+                            <View style={visiblePies === 1 ? styles.col12 : visiblePies === 2 ? styles.col6 : styles.col4}>
+                                <Image
+                                    style={styles.chartImage}
+                                    src={documentProps.gmb_pie_maps_search}
+                                />
+                            </View>
+                        )}
+
+                    </View>
+                </View>
+                {/* Row 2: Two Impression Bar Charts (No Page Break) */}
+                <View wrap={false}>
+                    <View style={styles.row}>
+
+                        {visibleGmbCharts.imp1 && (
+                            <View style={visibleImpressions === 1 ? styles.col12 : styles.col6}>
+                                <Image
+                                    style={styles.chartImage}
+                                    src={documentProps.gmb_impressions_search}
+                                />
+                            </View>
+                        )}
+
+                        {visibleGmbCharts.imp2 && (
+                            <View style={visibleImpressions === 1 ? styles.col12 : styles.col6}>
+                                <Image
+                                    style={styles.chartImage}
+                                    src={documentProps.gmb_impressions_maps}
+                                />
+                            </View>
+                        )}
+
+                    </View>
+                </View>
                 {/* Row 3: Business Interactions (Full Width) */}
                 {visibleGmbCharts.interactions && (
                     <View style={styles.row}>
-                        <View style={styles.col12}><Text style={styles.manualChartTitle}>Business Interactions</Text><Image style={styles.chartImage} src={documentProps.gmb_business_interactions} /></View>
+                        <View style={styles.col12}>
+                            {/* <Text style={styles.manualChartTitle}>Business Interactions</Text> */}
+                            <Image style={styles.chartImage} src={documentProps.gmb_business_interactions} /></View>
                     </View>
                 )}
+// This parent View keeps the row from splitting across a page
+                <View wrap={false}>
+                    <View style={styles.row}>
 
-                {/* Row 4 & 5: Search vs Maps Breakdown (Smart 2x2 Layout) */}
-                <View style={styles.row}>
-                    {visibleGmbCharts.breakdown1 && <View style={visibleBreakdown1 === 1 ? styles.col12 : styles.col6}><Text style={styles.manualChartTitle}>Desktop Search</Text><Image style={styles.chartImage} src={documentProps.gmb_desktop_search} /></View>}
-                    {visibleGmbCharts.breakdown2 && <View style={visibleBreakdown1 === 1 ? styles.col12 : styles.col6}><Text style={styles.manualChartTitle}>Mobile Search</Text><Image style={styles.chartImage} src={documentProps.gmb_mobile_search} /></View>}
-                </View>
-                <View style={styles.row}>
-                    {visibleGmbCharts.breakdown3 && <View style={visibleBreakdown2 === 1 ? styles.col12 : styles.col6}><Text style={styles.manualChartTitle}>Desktop Maps</Text><Image style={styles.chartImage} src={documentProps.gmb_desktop_maps} /></View>}
-                    {visibleGmbCharts.breakdown4 && <View style={visibleBreakdown2 === 1 ? styles.col12 : styles.col6}><Text style={styles.manualChartTitle}>Mobile Maps</Text><Image style={styles.chartImage} src={documentProps.gmb_mobile_maps} /></View>}
-                </View>
+                        {visibleGmbCharts.breakdown3 && (
+                            <View style={visibleBreakdown2 === 1 ? styles.col12 : styles.col6}>
+                                <Image
+                                    style={styles.chartImage}
+                                    src={documentProps.gmb_desktop_maps}
+                                />
+                            </View>
+                        )}
 
+                        {visibleGmbCharts.breakdown4 && (
+                            <View style={visibleBreakdown2 === 1 ? styles.col12 : styles.col6}>
+                                <Image
+                                    style={styles.chartImage}
+                                    src={documentProps.gmb_mobile_maps}
+                                />
+                            </View>
+                        )}
+
+                    </View>
+                </View>
+                <View wrap={false}>
+                    <View style={styles.row}>
+
+                        {visibleGmbCharts.breakdown3 && (
+                            <View style={visibleBreakdown2 === 1 ? styles.col12 : styles.col6}>
+                                <Image
+                                    style={styles.chartImage}
+                                    src={documentProps.gmb_desktop_maps}
+                                />
+                            </View>
+                        )}
+
+                        {visibleGmbCharts.breakdown4 && (
+                            <View style={visibleBreakdown2 === 1 ? styles.col12 : styles.col6}>
+                                <Image
+                                    style={styles.chartImage}
+                                    src={documentProps.gmb_mobile_maps}
+                                />
+                            </View>
+                        )}
+
+                    </View>
+                </View>
 
 
                 {/* Row 6: Interaction Bar Charts (Calls, Directions, Website Clicks) - UPDATED */}
@@ -803,19 +984,19 @@ const PdfReport = ({ documentProps }) => {
 
                         {visibleGmbCharts.calls && (
                             <View style={styles.col6}>
-                                <Text style={styles.manualChartTitle}>Calls made from GBP</Text>
+                                {/* <Text style={styles.manualChartTitle}>Calls made from GBP</Text> */}
                                 <Image style={styles.chartImage} src={documentProps.gmb_calls_made} />
                             </View>
                         )}
                         {visibleGmbCharts.directions && (
                             <View style={styles.col6}>
-                                <Text style={styles.manualChartTitle}>GBP Direction Requests</Text>
+                                {/* <Text style={styles.manualChartTitle}>GBP Direction Requests</Text> */}
                                 <Image style={styles.chartImage} src={documentProps.gmb_direction_requests} />
                             </View>
                         )}
                         {visibleGmbCharts.websiteClicks && (
                             <View style={styles.col6}>
-                                <Text style={styles.manualChartTitle}>GBP Website Clicks</Text>
+                                {/* <Text style={styles.manualChartTitle}>GBP Website Clicks</Text> */}
                                 <Image style={styles.chartImage} src={documentProps.gmb_website_clicks} />
                             </View>
                         )}

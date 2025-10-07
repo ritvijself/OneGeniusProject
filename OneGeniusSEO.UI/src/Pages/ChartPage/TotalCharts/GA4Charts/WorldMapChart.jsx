@@ -161,6 +161,8 @@ const WorldMapChart = ({
   );
 
   return (
+    //added shadow
+      <div className="card shadow-sm  h-100">  
     <div
       style={{
         display: "flex",
@@ -169,10 +171,11 @@ const WorldMapChart = ({
         border: "1px solid #dee2e6",
         padding: "10px",
         borderRadius: "8px",
+
       }}
     >
       <div
-        className="d-flex justify-content-between align-items-center"
+        className="d-flex justify-content-between align-items-center card-s "
         style={{ marginBottom: "10px" }}
       >
         <div
@@ -309,6 +312,7 @@ const WorldMapChart = ({
           </div>
         )}
       </div>
+    </div>
     </div>
   );
 };

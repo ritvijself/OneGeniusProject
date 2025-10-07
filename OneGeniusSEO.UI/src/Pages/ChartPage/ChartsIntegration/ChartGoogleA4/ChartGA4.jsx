@@ -70,10 +70,13 @@ const ChartGA4 = ({
           (Data Source - Google Analytics 4)
         </p>
       </div>
-      <p>How people are finding you on Google</p>
+      {/* <p>How people are finding you on Google</p> */}
       <Row className="mt-3">
+              <p>How people are finding you on Google</p>
+
         <Col md={6} key={SessionTable[0].id}>
         <div ref={(el) => setChartRef('ga4_channelsessiontable', el)}>
+
            <ChannelSessionTable
             propertyId={propertyid}
             SquareBox={SessionTable[0]}

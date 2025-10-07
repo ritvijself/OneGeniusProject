@@ -157,6 +157,8 @@ const ChannelSessionTable = ({ propertyId, startDate, endDate, SquareBox }) => {
     <div className={`${style.Orgnaic_content_box} h-100 card`}>
       <div className="d-flex align-items-center "></div>
       <div className={style.table_container}>
+                      {/* <p>How people are finding you on Google</p> */}
+
         <table className={style.metrics_table}>
           <thead>
             <tr>
